@@ -15,19 +15,20 @@ form?.addEventListener("submit", async (event) => {
     return;
   }
 
-  const response = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${localizacao}&appid=57ea381e6fc6ad06395da64c4fbabcce&lang=pt_br&units=metric`
-  );
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${localizacao}&appid=57ea381e6fc6ad06395da64c4fbabcce&lang=pt_br&units=metric`
+    );
 
-  const dados = await response.json();
-    
-  const infos = {
-    temperatura: Math.round(dados.main.temp),
-    local: dados.name,
-    icone: `https://openweathermap.org/img/wn/${dados.weather[0].icon}@2x.png`,
-  };
+    const dados = await response.json();
 
-  sectionTempoInfo.innerHTML = `
+    const infos = {
+      temperatura: Math.round(dados.main.temp),
+      local: dados.name,
+      icone: `https://openweathermap.org/img/wn/${dados.weather[0].icon}@2x.png`,
+    };
+
+    sectionTempoInfo.innerHTML = `
     <div class="tempo-dados">
         <h2>${infos.local}</h2>
 
@@ -36,4 +37,7 @@ form?.addEventListener("submit", async (event) => {
 
       <img src="${infos.icone}">
         `;
+  } catch (erro) {
+    console.log("Deu um erro na obtenção dos dados da API", erro);
+  }
 });

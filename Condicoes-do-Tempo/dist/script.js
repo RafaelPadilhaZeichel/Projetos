@@ -20,14 +20,15 @@ form === null || form === void 0 ? void 0 : form.addEventListener("submit", (eve
         alert("O local precisa ter pelo menos três letras...");
         return;
     }
-    const response = yield fetch(`https://api.openweathermap.org/data/2.5/weather?q=${localizacao}&appid=57ea381e6fc6ad06395da64c4fbabcce&lang=pt_br&units=metric`);
-    const dados = yield response.json();
-    const infos = {
-        temperatura: Math.round(dados.main.temp),
-        local: dados.name,
-        icone: `https://openweathermap.org/img/wn/${dados.weather[0].icon}@2x.png`,
-    };
-    sectionTempoInfo.innerHTML = `
+    try {
+        const response = yield fetch(`https://api.openweathermap.org/data/2.5/weather?q=${localizacao}&appid=57ea381e6fc6ad06395da64c4fbabcce&lang=pt_br&units=metric`);
+        const dados = yield response.json();
+        const infos = {
+            temperatura: Math.round(dados.main.temp),
+            local: dados.name,
+            icone: `https://openweathermap.org/img/wn/${dados.weather[0].icon}@2x.png`,
+        };
+        sectionTempoInfo.innerHTML = `
     <div class="tempo-dados">
         <h2>${infos.local}</h2>
 
@@ -36,4 +37,8 @@ form === null || form === void 0 ? void 0 : form.addEventListener("submit", (eve
 
       <img src="${infos.icone}">
         `;
+    }
+    catch (erro) {
+        console.log("Deu um erro na obtenção dos dados da API", erro);
+    }
 }));
